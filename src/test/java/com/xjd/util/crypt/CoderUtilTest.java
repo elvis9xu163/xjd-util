@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 
 import junit.framework.Assert;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,9 @@ public class CoderUtilTest {
 		test(CoderUtil.HEX, data);
 		test(CoderUtil.BASE64, data);
 		test(CoderUtil.URLBASE64, data);
+		
+		test(data);
+		
 	}
 	
 	public void test(String algorithm, String data) throws UnsupportedEncodingException {
@@ -31,6 +36,18 @@ public class CoderUtilTest {
 		log.info("");
 		
 		Assert.assertEquals(data, new String(deData, "UTF-8"));
+	}
+	
+	public void test(String data) throws UnsupportedEncodingException {
+		byte[] o = data.getBytes("UTF-8");
+		
+		byte[] en = CoderUtil.encode(CoderUtil.BASE64, o);
+		String enStr = new String(en, "UTF-8");
+		Assert.assertEquals(Base64.encodeBase64String(o), enStr);
+		
+		byte[] en2 = CoderUtil.encode(CoderUtil.HEX, o);
+		String en2Str = new String(en2, "UTF-8");
+		Assert.assertEquals(Hex.encodeHexString(o), en2Str);
 	}
 
 }
