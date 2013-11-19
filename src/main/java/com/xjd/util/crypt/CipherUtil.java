@@ -1,6 +1,7 @@
 package com.xjd.util.crypt;
 
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
@@ -28,21 +29,29 @@ public abstract class CipherUtil {
 		return secretKey;
 	}
 
-	public static byte[] encrypt(String algorithm, byte[] key, byte[] data) throws Exception {
-		Key k = toKey(algorithm, key);
-		Cipher cipher = Cipher.getInstance(algorithm);
-		cipher.init(Cipher.ENCRYPT_MODE, k);
-		return cipher.doFinal(data);
+	public static byte[] encrypt(String algorithm, byte[] key, byte[] data) {
+		try {
+			Key k = toKey(algorithm, key);
+			Cipher cipher = Cipher.getInstance(algorithm);
+			cipher.init(Cipher.ENCRYPT_MODE, k);
+			return cipher.doFinal(data);
+		} catch (Exception e) {
+			throw new CryptException(e);
+		}
 	}
 	
-	public static byte[] decrypt(String algorithm, byte[] key, byte[] data) throws Exception {
-		Key k = toKey(algorithm, key);
-		Cipher cipher = Cipher.getInstance(algorithm);
-		cipher.init(Cipher.DECRYPT_MODE, k);
-		return cipher.doFinal(data);
+	public static byte[] decrypt(String algorithm, byte[] key, byte[] data) {
+		try {
+			Key k = toKey(algorithm, key);
+			Cipher cipher = Cipher.getInstance(algorithm);
+			cipher.init(Cipher.DECRYPT_MODE, k);
+			return cipher.doFinal(data);
+		} catch (Exception e) {
+			throw new CryptException(e);
+		}
 	}
 	
-	public static byte[] genKey(String algorithm, byte[] seed) throws Exception {
+	public static byte[] genKey(String algorithm, byte[] seed) {
 		SecureRandom secureRandom = null;
 		
 		if (seed != null) {
@@ -51,9 +60,13 @@ public abstract class CipherUtil {
 			secureRandom = new SecureRandom();
 		}
 		
-		KeyGenerator kg = KeyGenerator.getInstance(algorithm);
-		kg.init(secureRandom);
-		
-		return kg.generateKey().getEncoded();
+		try {
+			KeyGenerator kg = KeyGenerator.getInstance(algorithm);
+			kg.init(secureRandom);
+			
+			return kg.generateKey().getEncoded();
+		} catch (NoSuchAlgorithmException e) {
+			throw new CryptException(e);
+		}
 	}
 }

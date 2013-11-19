@@ -67,12 +67,12 @@ public abstract class DigestUtil {
 	protected static Digest getDigest(String algorithm) {
 		Class<? extends Digest> clazz = digestMap.get(algorithm);
 		if (clazz == null) {
-			throw new RuntimeException(String.format("The algorithm '%s' is not support.", algorithm));
+			throw new CryptException(String.format("The algorithm '%s' is not support.", algorithm));
 		}
 		try {
 			return clazz.newInstance();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new CryptException(e);
 		}
 	}
 

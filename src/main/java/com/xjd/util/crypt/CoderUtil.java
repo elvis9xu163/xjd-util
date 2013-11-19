@@ -30,7 +30,7 @@ public abstract class CoderUtil {
 		try {
 			encode(algorithm, data, out);
 		} catch (IOException e) {
-			throw new RuntimeException("编码异常!", e);
+			throw new CryptException("编码异常!", e);
 		}
 		
 		return out.toByteArray();
@@ -50,7 +50,7 @@ public abstract class CoderUtil {
 		try {
 			decode(algorithm, data, out);
 		} catch (IOException e) {
-			throw new RuntimeException("解码异常!", e);
+			throw new CryptException("解码异常!", e);
 		}
 		
 		return out.toByteArray();
@@ -76,7 +76,7 @@ public abstract class CoderUtil {
 			encoder = new UrlBase64Encoder();
 			
 		} else {
-			throw new RuntimeException(String.format("The algorithm '%s' is not support.", algorithm));
+			throw new CryptException(String.format("The algorithm '%s' is not support.", algorithm));
 		}
 		return encoder;
 	}
