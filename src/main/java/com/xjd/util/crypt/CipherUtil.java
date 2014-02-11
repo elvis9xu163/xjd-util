@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * <pre>
- * 加解密工具类
+ * 对称加解密工具类
  * </pre>
  * @author elvis.xu
  * @date 2013-11-18
