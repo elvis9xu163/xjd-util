@@ -25,7 +25,7 @@ public class InputStreamInterceptor implements InputStreamInterceptorAware, Meth
 
 	@Override
 	public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-		Class methodClass = method.getDeclaringClass();
+		Class<?> methodClass = method.getDeclaringClass();
 
 		// 调用Object中的方法
 		if (methodClass.equals(Object.class)) {

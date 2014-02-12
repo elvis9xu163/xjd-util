@@ -11,12 +11,8 @@ import net.sf.cglib.proxy.Enhancer;
 
 import com.xjd.util.io.feature.IOFeatureRuntimeException;
 import com.xjd.util.io.feature.impl.in.featureimpl.CountBytesFeatureImpl;
-import com.xjd.util.io.feature.impl.in.featureimpl.ListenProgressFeatureImpl;
-import com.xjd.util.io.feature.impl.in.featureimpl.NotifyAtBytesFeatureImpl;
 import com.xjd.util.io.feature.in.CountBytesFeature;
 import com.xjd.util.io.feature.in.InputStreamFeature;
-import com.xjd.util.io.feature.in.ListenProgressFeature;
-import com.xjd.util.io.feature.in.NotifyAtBytesFeature;
 
 /**
  * <pre>
@@ -36,8 +32,6 @@ public class InputStreamFeatureBinder {
 			featureClassMap = new HashMap<Class<? extends InputStreamFeature>, Class<? extends InputStreamFeature>>();
 			// add default
 			featureClassMap.put(CountBytesFeature.class, CountBytesFeatureImpl.class);
-			featureClassMap.put(ListenProgressFeature.class, ListenProgressFeatureImpl.class);
-			featureClassMap.put(NotifyAtBytesFeature.class, NotifyAtBytesFeatureImpl.class);
 		}
 	}
 	

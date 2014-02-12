@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import com.xjd.util.io.feature.in.CountBytesFeature;
 import com.xjd.util.io.feature.in.InputStreamFeature;
-import com.xjd.util.io.feature.in.ListenProgressFeature;
 
 public class InputStreamFeatureBinderTest {
 
@@ -27,22 +26,22 @@ public class InputStreamFeatureBinderTest {
 	public void test() throws IOException {
 		Map<Class<? extends InputStreamFeature>, Object> featureMap = new LinkedHashMap<Class<? extends InputStreamFeature>, Object>();
 		featureMap.put(CountBytesFeature.class, null);
-		featureMap.put(ListenProgressFeature.class, null);
 
 		InputStream win = InputStreamFeatureBinder.bind(in, featureMap);
 		CountBytesFeature cf = (CountBytesFeature) win;
-		ListenProgressFeature lpf = (ListenProgressFeature) win;
 
 		win.read();
-		assertThat(1L).isEqualTo(cf.getUsedBytes()).isEqualTo(lpf.getUsedBytes());
+		cf.getUsedBytes();
+		assertThat(1L).isEqualTo(cf.getUsedBytes());
+		assertThat(1L).isEqualTo(cf.getReadBytes());
 
 		win.read(new byte[2]);
-		assertThat(3L).isEqualTo(cf.getUsedBytes()).isEqualTo(lpf.getUsedBytes());
-		assertThat(3L).isEqualTo(cf.getReadBytes()).isEqualTo(lpf.getReadBytes());
+		assertThat(3L).isEqualTo(cf.getUsedBytes());
+		assertThat(3L).isEqualTo(cf.getReadBytes());
 
 		win.skip(3);
-		assertThat(6L).isEqualTo(cf.getUsedBytes()).isEqualTo(lpf.getUsedBytes());
-		assertThat(3L).isEqualTo(cf.getSkippedBytes()).isEqualTo(lpf.getSkippedBytes());
+		assertThat(6L).isEqualTo(cf.getUsedBytes());
+		assertThat(3L).isEqualTo(cf.getSkippedBytes());
 
 	}
 
