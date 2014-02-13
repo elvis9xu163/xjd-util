@@ -1,4 +1,4 @@
-package com.xjd.util.io.feature.impl.in;
+package com.xjd.util.io.feature;
 
 import java.io.IOException;
 import java.io.InputStream;

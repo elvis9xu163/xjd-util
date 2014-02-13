@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.xjd.util.io.feature.impl.in.ConstInputStream;
+import com.xjd.util.io.feature.ConstInputStream;
 import com.xjd.util.io.feature.in.CountBytesFeature;
 import com.xjd.util.io.feature.in.CountBytesFeature.NotifySizeListener;
 import com.xjd.util.io.feature.in.CountBytesFeature.ProgressListener;
@@ -94,6 +94,13 @@ public class CountBytesFeatureImplTest {
 		
 		f.read(new byte[2], 0, 1);
 		assertThat(4L).isEqualTo(rt.get("nl"));
+		
+		f.addProgressListener(new ProgressListener() {
+			@Override
+			public void onProgress(CountBytesFeature obj, long totallUsedBytes, long thisUsedBytes) {
+				assertThat(obj.getClass().equals(CountBytesFeatureImpl.class));
+			}
+		});
 		
 	}
 

@@ -1,6 +1,7 @@
 package com.xjd.util.io.feature.impl.in;
 
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,7 +14,8 @@ import net.sf.cglib.proxy.MethodProxy;
 import com.xjd.util.io.feature.IOFeatureRuntimeException;
 import com.xjd.util.io.feature.in.InputStreamFeature;
 
-public class InputStreamInterceptor implements InputStreamInterceptorAware, MethodInterceptor {
+public class InputStreamInterceptor implements InputStreamInterceptorGetter, MethodInterceptor {
+	protected InputStream enhancedInputStream;
 	protected InputStream source;
 	protected InputStream lastDelegator;
 	protected LinkedHashMap<Class<? extends InputStreamFeature>, InputStreamFeature> featureMap = new LinkedHashMap<Class<? extends InputStreamFeature>, InputStreamFeature>();
@@ -25,6 +27,10 @@ public class InputStreamInterceptor implements InputStreamInterceptorAware, Meth
 
 	@Override
 	public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+		if (enhancedInputStream == null) {
+			enhancedInputStream = (InputStream) obj;
+		}
+
 		Class<?> methodClass = method.getDeclaringClass();
 
 		// 调用Object中的方法
@@ -49,12 +55,19 @@ public class InputStreamInterceptor implements InputStreamInterceptorAware, Meth
 		}
 
 		// 调用InputStreamInterceptorAware中的方法
-		if (InputStreamInterceptorAware.class.isAssignableFrom(methodClass)) {
+		if (InputStreamInterceptorGetter.class.isAssignableFrom(methodClass)) {
 			return method.invoke(this, args);
 		}
 
 		// 调用InputStream中的方法
-		return method.invoke(lastDelegator, args);
+		try {
+		    return method.invoke(lastDelegator, args);
+		} catch (Exception e) {
+		    if (e instanceof InvocationTargetException && e.getCause() != null) {
+			throw e.getCause();
+		    }
+		    throw e;
+		}
 	}
 
 	public void addFeature(Class<? extends InputStreamFeature> featureClass, InputStreamFeature featureImpl) {
@@ -67,9 +80,7 @@ public class InputStreamInterceptor implements InputStreamInterceptorAware, Meth
 		if (featureMap.get(featureClass) != null) {
 			throw new IOFeatureRuntimeException("feature[" + featureClass + "] already added.");
 		}
-		((AbstractInputStreamFeature) featureImpl).setSource(lastDelegator);
-		lastDelegator = (InputStream) featureImpl;
-		featureMap.put(featureClass, featureImpl);
+		doAddFeature(featureClass, ((AbstractInputStreamFeature) featureImpl));
 	}
 
 	public void addFeature(Class<? extends InputStreamFeature> featureClass, Class<? extends InputStreamFeature> featureImplClass) {
@@ -84,12 +95,17 @@ public class InputStreamInterceptor implements InputStreamInterceptorAware, Meth
 		}
 		try {
 			InputStreamFeature featureImpl = featureImplClass.newInstance();
-			((AbstractInputStreamFeature) featureImpl).setSource(lastDelegator);
-			lastDelegator = (InputStream) featureImpl;
-			featureMap.put(featureClass, featureImpl);
+			doAddFeature(featureClass, ((AbstractInputStreamFeature) featureImpl));
 		} catch (Exception e) {
 			throw new IOFeatureRuntimeException(e);
 		}
+	}
+	
+	protected void doAddFeature(Class<? extends InputStreamFeature> featureClass, AbstractInputStreamFeature featureImpl) {
+		featureImpl.setSource(lastDelegator);
+		featureImpl.setInputStreamInterceptor(this);
+		lastDelegator = (InputStream) featureImpl;
+		featureMap.put(featureClass, featureImpl);
 	}
 
 	public void removeFeature(Class<? extends InputStreamFeature> featureClass) {
@@ -103,19 +119,21 @@ public class InputStreamInterceptor implements InputStreamInterceptorAware, Meth
 				}
 			}
 
+			AbstractInputStreamFeature featureImpl;
 			if (cur == null || !featureClass.equals(cur)) {
 				// cur == null : 表示当前只有一个feature, 且就是要移除的feature
 				// !featureClass.equals(cur) ： 表示要移除的feature为最后一个feature
-				AbstractInputStreamFeature featureImpl = (AbstractInputStreamFeature) featureMap.get(featureClass);
+				featureImpl = (AbstractInputStreamFeature) featureMap.get(featureClass);
 				lastDelegator = featureImpl.getSource();
-				featureImpl.setSource(null);
 			} else {
 				AbstractInputStreamFeature curFeatureImpl = (AbstractInputStreamFeature) cur.getValue();
 				AbstractInputStreamFeature nextFeatureImpl = (AbstractInputStreamFeature) next.getValue();
 				nextFeatureImpl.setSource(curFeatureImpl.getSource());
-				curFeatureImpl.setSource(null);
+				featureImpl = curFeatureImpl;
 			}
 
+			featureImpl.setSource(null);
+			featureImpl.setInputStreamInterceptor(null);
 			featureMap.remove(featureClass);
 		}
 	}
@@ -129,6 +147,10 @@ public class InputStreamInterceptor implements InputStreamInterceptorAware, Meth
 		List<Class<? extends InputStreamFeature>> list = new ArrayList<Class<? extends InputStreamFeature>>(featureMap.size());
 		list.addAll(featureMap.keySet());
 		return list;
+	}
+
+	public InputStream getEnhancedInputStream() {
+		return enhancedInputStream;
 	}
 
 }

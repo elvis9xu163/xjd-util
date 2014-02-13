@@ -77,11 +77,16 @@ public class CountBytesFeatureImpl extends AbstractInputStreamFeature implements
 		fireNotifySize();
 		return l;
 	}
+	
+	protected CountBytesFeature getThis() {
+		return (CountBytesFeature) getEnhancedInputStream();
+	}
 
 	protected void fireProgress(long curBytes) {
 		if (progressLsnrs != null) {
+			CountBytesFeature targetObj = getThis();
 			for (ProgressListener listener : progressLsnrs) {
-				listener.onProgress(this, getUsedBytes(), curBytes);
+				listener.onProgress(targetObj, getUsedBytes(), curBytes);
 			}
 		}
 	}
@@ -91,6 +96,8 @@ public class CountBytesFeatureImpl extends AbstractInputStreamFeature implements
 		if (progressLsnrs == null) {
 			progressLsnrs = new ArrayList<ProgressListener>();
 		}
+		//有必要先调用一次
+		listener.onProgress(getThis(), getUsedBytes(), 0);
 		progressLsnrs.add(listener);
 	}
 
@@ -110,10 +117,11 @@ public class CountBytesFeatureImpl extends AbstractInputStreamFeature implements
 	}
 
 	protected void fireNotifySize() {
+		CountBytesFeature targetObj = getThis();
 		while (notifyLsnrs != null && notifyLsnrs.size() > 0) {
 			NotifySizeListener lsnr = notifyLsnrs.get(0);
 			if (getUsedBytes() >= lsnr.getNotifySize()) {
-				lsnr.onSize(this);
+				lsnr.onSize(targetObj);
 				notifyLsnrs.remove(lsnr);
 			} else {
 				break;
@@ -125,6 +133,10 @@ public class CountBytesFeatureImpl extends AbstractInputStreamFeature implements
 	public void addNotifySizeListener(NotifySizeListener listener) {
 		if (listener == null) {
 			throw new IOFeatureRuntimeException("Cannot add null.");
+		}
+		if (getUsedBytes() >= listener.getNotifySize()) {
+			listener.onSize(getThis());
+			return;
 		}
 		if (notifyLsnrs == null) {
 			notifyLsnrs = new ArrayList<NotifySizeListener>();

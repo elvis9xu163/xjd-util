@@ -1,5 +1,5 @@
 package com.xjd.util.io.feature.impl.in;
 
-public interface InputStreamInterceptorAware {
+public interface InputStreamInterceptorGetter {
 	InputStreamInterceptor getInputStreamInterceptor();
 }
