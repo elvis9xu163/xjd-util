@@ -90,5 +90,23 @@ public class DecorateFeatureTest {
 	assertThat(buf).isEqualTo(new byte[] { 4, 4, 4, 0, 0 });
 
     }
+    
+    @Test
+    public void test3() throws IOException {
+	InputStream in = new ByteArrayInputStream(new byte[]{1,1,1});
+	
+	DecorateFeature win = (DecorateFeature) IOFeatures.bind(in, DecorateFeature.class);
+	win.setDecoratedHead(new byte[]{0,0,0});
+	win.setDecoratedTail(new byte[]{3,3,3});
+	
+	byte[] buf = new byte[9];
+	
+	for (int i = 0; i < buf.length; i++) {
+	    buf[i] = (byte) win.read();
+	}
+	
+	assertThat(win.read()).isEqualTo(-1);
+	assertThat(buf).isEqualTo(new byte[]{0,0,0,1,1,1,3,3,3});
+    }
 
 }

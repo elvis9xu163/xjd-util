@@ -9,7 +9,6 @@ import org.bouncycastle.util.encoders.Encoder;
 import org.bouncycastle.util.encoders.HexEncoder;
 import org.bouncycastle.util.encoders.UrlBase64Encoder;
 
-
 /**
  * <pre>
  * 编码工具类
@@ -23,19 +22,19 @@ public abstract class CoderUtil {
 	public static final String HEX = "HEX";
 	public static final String BASE64 = "BASE64";
 	public static final String URLBASE64 = "UrlBase64";
-	
+
 	public static byte[] encode(String algorithm, byte[] data) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream(data.length);
-		
+
 		try {
 			encode(algorithm, data, out);
 		} catch (IOException e) {
 			throw new CryptException("编码异常!", e);
 		}
-		
+
 		return out.toByteArray();
 	}
-	
+
 	public static int encode(String algorithm, byte[] data, OutputStream outputstream) throws IOException {
 		return encode(getEncoder(algorithm), data, outputstream);
 	}
@@ -46,35 +45,35 @@ public abstract class CoderUtil {
 
 	public static byte[] decode(String algorithm, byte[] data) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream(data.length);
-		
+
 		try {
 			decode(algorithm, data, out);
 		} catch (IOException e) {
 			throw new CryptException("解码异常!", e);
 		}
-		
+
 		return out.toByteArray();
 	}
-	
+
 	public static int decode(String algorithm, byte[] data, OutputStream outputstream) throws IOException {
 		return decode(getEncoder(algorithm), data, outputstream);
 	}
-	
+
 	public static int decode(Encoder encoder, byte[] data, OutputStream outputstream) throws IOException {
 		return encoder.decode(data, 0, data.length, outputstream);
 	}
-	
+
 	protected static Encoder getEncoder(String algorithm) {
 		Encoder encoder = null;
 		if (HEX.equalsIgnoreCase(algorithm)) {
 			encoder = new HexEncoder();
-			
+
 		} else if (BASE64.equalsIgnoreCase(algorithm)) {
 			encoder = new Base64Encoder();
-			
+
 		} else if (URLBASE64.equalsIgnoreCase(algorithm)) {
 			encoder = new UrlBase64Encoder();
-			
+
 		} else {
 			throw new CryptException(String.format("The algorithm '%s' is not support.", algorithm));
 		}

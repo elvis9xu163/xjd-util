@@ -25,15 +25,15 @@ public class CoderUtilTest {
 	}
 	
 	public void test(String algorithm, String data) throws UnsupportedEncodingException {
-		log.info("开始测试算法...: algorithm='{}'", algorithm);
-		log.info("编码前的数据: [{}]", data);
+		log.debug("开始测试算法...: algorithm='{}'", algorithm);
+		log.debug("编码前的数据: [{}]", data);
 		
 		byte[] enData = CoderUtil.encode(algorithm, data.getBytes("UTF-8"));
-		log.info("编码后的数据: [{}]", new String(enData, "UTF-8"));
+		log.debug("编码后的数据: [{}]", new String(enData, "UTF-8"));
 		
 		byte[] deData = CoderUtil.decode(algorithm, enData);
-		log.info("解码后的数据: [{}]", new String(deData, "UTF-8"));
-		log.info("");
+		log.debug("解码后的数据: [{}]", new String(deData, "UTF-8"));
+		log.debug("");
 		
 		Assert.assertEquals(data, new String(deData, "UTF-8"));
 	}

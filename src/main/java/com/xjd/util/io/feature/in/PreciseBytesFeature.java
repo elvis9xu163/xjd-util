@@ -9,6 +9,7 @@ package com.xjd.util.io.feature.in;
  * 3. InputStream.skip(long)
  * 
  * </pre>
+ * 
  * @author elvis.xu
  * @since 2014-2-13
  */

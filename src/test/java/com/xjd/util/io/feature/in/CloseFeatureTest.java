@@ -34,7 +34,6 @@ public class CloseFeatureTest {
 	    win.read();
 	} catch (Exception e1) {
 	    e = e1;
-	    e.printStackTrace();
 	}
 	assertThat(e).isNotNull().isInstanceOf(IOException.class);
     }

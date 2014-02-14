@@ -2,9 +2,9 @@ package com.xjd.util.io.feature.impl.in.featureimpl;
 
 import java.io.IOException;
 
-import com.xjd.util.io.feature.in.InputStreamFeature;
+import com.xjd.util.io.feature.in.PreciseBytesFeature;
 
-public class PreciseBytesFeatureImpl extends EOFFeatureImpl implements InputStreamFeature {
+public class PreciseBytesFeatureImpl extends EOFFeatureImpl implements PreciseBytesFeature {
 
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {

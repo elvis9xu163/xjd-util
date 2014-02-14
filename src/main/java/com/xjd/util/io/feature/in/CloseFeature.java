@@ -33,11 +33,12 @@ public interface CloseFeature extends InputStreamFeature {
 	 * @see THROW_EXCEPTION
 	 */
 	void setMode(int mode);
-	
+
 	/**
 	 * <pre>
 	 * 返回当前的mode
 	 * </pre>
+	 * 
 	 * @return
 	 */
 	int getMode();
@@ -51,11 +52,12 @@ public interface CloseFeature extends InputStreamFeature {
 	 * @param colse
 	 */
 	void setCloseSource(boolean colse);
-	
+
 	/**
 	 * <pre>
 	 * 返回当前设置
 	 * </pre>
+	 * 
 	 * @return
 	 */
 	boolean getCloseSource();
@@ -64,6 +66,7 @@ public interface CloseFeature extends InputStreamFeature {
 	 * <pre>
 	 * 是否已关闭
 	 * </pre>
+	 * 
 	 * @return
 	 */
 	boolean isClosed();
@@ -72,6 +75,7 @@ public interface CloseFeature extends InputStreamFeature {
 	 * <pre>
 	 * 添加流关闭监听器
 	 * </pre>
+	 * 
 	 * @param listener
 	 */
 	void addCloseListener(CloseListener listener);
@@ -80,6 +84,7 @@ public interface CloseFeature extends InputStreamFeature {
 	 * <pre>
 	 * 移除流关闭监听器
 	 * </pre>
+	 * 
 	 * @param listener
 	 */
 	void removeCloseListener(CloseListener listener);

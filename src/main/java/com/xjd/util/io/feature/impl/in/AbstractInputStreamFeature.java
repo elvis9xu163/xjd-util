@@ -1,7 +1,6 @@
 package com.xjd.util.io.feature.impl.in;
 
 import java.io.FilterInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import com.xjd.util.io.feature.in.InputStreamFeature;
@@ -37,6 +36,7 @@ public abstract class AbstractInputStreamFeature extends FilterInputStream imple
 	 * 若增强的对象尚未使用，则获取到的就是自身。
 	 * 一般用于回调函数中。
 	 * </pre>
+	 * 
 	 * @return
 	 */
 	public InputStream getEnhancedInputStream() {
@@ -49,6 +49,5 @@ public abstract class AbstractInputStreamFeature extends FilterInputStream imple
 	void setInputStreamInterceptor(InputStreamInterceptor interceptor) {
 		this.interceptor = interceptor;
 	}
-	
 
 }

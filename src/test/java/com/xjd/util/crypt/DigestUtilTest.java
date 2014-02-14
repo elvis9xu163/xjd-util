@@ -34,21 +34,21 @@ public class DigestUtilTest {
 	}
 	
 	public void test(String algorithm, String data) throws UnsupportedEncodingException {
-		log.info("开始测试算法...: algorithm='{}'", algorithm);
-		log.info("编码前的数据: [{}]", data);
-		log.info("编码前的数据(Base64编码): [{}]", new String(CoderUtil.encode(CoderUtil.BASE64, data.getBytes("UTF-8")), "UTF-8"));
+		log.debug("开始测试算法...: algorithm='{}'", algorithm);
+		log.debug("编码前的数据: [{}]", data);
+		log.debug("编码前的数据(Base64编码): [{}]", new String(CoderUtil.encode(CoderUtil.BASE64, data.getBytes("UTF-8")), "UTF-8"));
 		
 		byte[] enData = DigestUtil.digest(algorithm, data.getBytes("UTF-8"));
-		log.info("编码后的数据1: [{}]", new String(enData, "UTF-8"));
-		log.info("编码后的数据1(Base64编码): [{}]", new String(CoderUtil.encode(CoderUtil.BASE64, enData), "UTF-8"));
+		log.debug("编码后的数据1: [{}]", new String(enData, "UTF-8"));
+		log.debug("编码后的数据1(Base64编码): [{}]", new String(CoderUtil.encode(CoderUtil.BASE64, enData), "UTF-8"));
 		
 		byte[] enData2 = DigestUtil.digest(algorithm, data.getBytes("UTF-8"));
-		log.info("编码后的数据2: [{}]", new String(enData2, "UTF-8"));
-		log.info("编码后的数据2(Base64编码): [{}]", new String(CoderUtil.encode(CoderUtil.BASE64, enData2), "UTF-8"));
+		log.debug("编码后的数据2: [{}]", new String(enData2, "UTF-8"));
+		log.debug("编码后的数据2(Base64编码): [{}]", new String(CoderUtil.encode(CoderUtil.BASE64, enData2), "UTF-8"));
 		
 		Assert.assertTrue(Arrays.areEqual(enData, enData2));
 		
-		log.info("");
+		log.debug("");
 	}
 
 }

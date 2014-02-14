@@ -61,12 +61,12 @@ public class InputStreamInterceptor implements InputStreamInterceptorGetter, Met
 
 		// 调用InputStream中的方法
 		try {
-		    return method.invoke(lastDelegator, args);
+			return method.invoke(lastDelegator, args);
 		} catch (Exception e) {
-		    if (e instanceof InvocationTargetException && e.getCause() != null) {
-			throw e.getCause();
-		    }
-		    throw e;
+			if (e instanceof InvocationTargetException && e.getCause() != null) {
+				throw e.getCause();
+			}
+			throw e;
 		}
 	}
 
@@ -100,7 +100,7 @@ public class InputStreamInterceptor implements InputStreamInterceptorGetter, Met
 			throw new IOFeatureRuntimeException(e);
 		}
 	}
-	
+
 	protected void doAddFeature(Class<? extends InputStreamFeature> featureClass, AbstractInputStreamFeature featureImpl) {
 		featureImpl.setSource(lastDelegator);
 		featureImpl.setInputStreamInterceptor(this);

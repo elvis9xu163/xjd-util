@@ -63,7 +63,7 @@ public abstract class DigestUtil {
 		digestMap.put(TIGER, TigerDigest.class);
 		digestMap.put(WHIRLPOOL, WhirlpoolDigest.class);
 	}
-	
+
 	protected static Digest getDigest(String algorithm) {
 		Class<? extends Digest> clazz = digestMap.get(algorithm);
 		if (clazz == null) {
@@ -83,5 +83,5 @@ public abstract class DigestUtil {
 		digest.doFinal(buf, 0);
 		return buf;
 	}
-	
+
 }

@@ -9,12 +9,13 @@ import java.io.IOException;
  * 被所有InputStream的特性继承，从而用户在使用过程中
  * 不需要强制类型转换为InputStream也能使用其所有方法。
  * </pre>
+ * 
  * @see java.io.InputStream
  * @author elvis.xu
  * @since 2014-2-11
  */
 public interface InputStreamFeature {
-	
+
 	int read() throws IOException;
 
 	int read(byte b[]) throws IOException;
@@ -32,5 +33,5 @@ public interface InputStreamFeature {
 	void reset() throws IOException;
 
 	public boolean markSupported();
-	
+
 }

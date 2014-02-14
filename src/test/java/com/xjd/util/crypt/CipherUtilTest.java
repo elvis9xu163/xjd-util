@@ -23,20 +23,20 @@ public class CipherUtilTest {
 	}
 	
 	public void test(String algorithm, String data) throws UnsupportedEncodingException {
-		log.info("开始测试算法...: algorithm='{}'", algorithm);
-		log.info("加密前的数据: [{}]", data);
+		log.debug("开始测试算法...: algorithm='{}'", algorithm);
+		log.debug("加密前的数据: [{}]", data);
 		
 		byte[] key = CipherUtil.genKey(algorithm, null);
-		log.info("生成的KEY: [{}]", new String(key, "UTF-8"));
+		log.debug("生成的KEY: [{}]", new String(key, "UTF-8"));
 		
 		byte[] enData = CipherUtil.encrypt(algorithm, key, data.getBytes("UTF-8"));
-		log.info("加密后的数据: [{}]", new String(enData, "UTF-8"));
+		log.debug("加密后的数据: [{}]", new String(enData, "UTF-8"));
 		
 		byte[] deData = CipherUtil.decrypt(algorithm, key, enData);
-		log.info("解密后的数据: [{}]", new String(deData, "UTF-8"));
+		log.debug("解密后的数据: [{}]", new String(deData, "UTF-8"));
 		
 		Assert.assertEquals(data, new String(deData, "UTF-8"));
-		log.info("");
+		log.debug("");
 	}
 	
 	@Test
