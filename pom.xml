@@ -6,7 +6,7 @@
 
 	<groupId>com.xjd.util</groupId>
 	<artifactId>xjd-util</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.2</version>
 	<packaging>jar</packaging>
 	<name>XJD Util</name>
 
